@@ -2,6 +2,7 @@ import { getAuth } from "./auth";
 import { SignInInput } from "./user.interface";
 import { UserInput } from "./user.validation";
 
+// user registration service
 const userRegistration = async (payload: UserInput) => {
   const auth = await getAuth();
 
@@ -25,6 +26,7 @@ const userRegistration = async (payload: UserInput) => {
   };
 };
 
+// user sign in service
 const userSignIn = async (payload: SignInInput) => {
   const auth = await getAuth();
 
@@ -42,7 +44,17 @@ const userSignIn = async (payload: SignInInput) => {
   };
 };
 
+const userSignOut = async (token: string) => {
+  const auth = await getAuth();
+  return await auth.api.signOut({
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const userService = {
   userRegistration,
   userSignIn,
+  userSignOut,
 };

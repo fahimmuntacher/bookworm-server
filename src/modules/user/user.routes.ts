@@ -5,5 +5,6 @@ const router = Router();
 
 router.post("/register", userControllers.userRegistration);
 router.post("/signin", userControllers.userSignIn);
+router.post("/signout", userControllers.userSignOut);
 
 export const userRouter = router;
