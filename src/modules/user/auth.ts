@@ -2,7 +2,6 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { connectDB } from "../../config/db";
 
-
 export const getAuth = async () => {
   const db = await connectDB();
 
@@ -11,6 +10,19 @@ export const getAuth = async () => {
     emailAndPassword: {
       enabled: true,
     },
-    secret: process.env.BETTER_AUTH_SECRET!,
+    trustedOrigins: [process.env.TRUSTED_ORIGINS || "http://localhost:3000"],
+    user: {
+      additionalFields: {
+        role: {
+          type: "string",
+          defaultValue: "user",
+          required: false,
+        },
+        image: {
+          type: "string",
+          required: false,
+        },
+      },
+    },
   });
 };
