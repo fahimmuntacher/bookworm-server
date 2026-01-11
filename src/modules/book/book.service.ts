@@ -20,13 +20,13 @@ const createBook = async (payload: Book) => {
   });
 };
 
+// get all books
 const getAllBooks = async () => {
-    const db = await connectDB();
-    return db.collection<Book>(COLLECTION).find().toArray()
-}
+  const db = await connectDB();
+  return db.collection<Book>(COLLECTION).find().toArray();
+};
 
 export const BookService = {
   createBook,
-  getAllBooks
+  getAllBooks,
 };
-
