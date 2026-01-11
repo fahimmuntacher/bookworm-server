@@ -1,18 +1,25 @@
-
 import { Book } from "./book.interface";
+import { connectDB } from "../../config/db";
 
 const COLLECTION = "books";
+
+// create book
 const createBook = async (payload: Book) => {
-    // TODO: Replace with actual database insert logic
-    const newBook = {
-        id: Date.now().toString(),
-        ...payload
-    };
-    return newBook;
-}
+  const { title } = payload;
+  const db = await connectDB();
+  const existedBook = await db.collection(COLLECTION).findOne({
+    title: title,
+  });
 
-
+  if (existedBook) {
+    throw new Error("The book is already added");
+  }
+  return db.collection<Book>(COLLECTION).insertOne({
+    ...payload,
+    createdAt: new Date(),
+  });
+};
 
 export const BookService = {
-    createBook
-}
+  createBook,
+};
