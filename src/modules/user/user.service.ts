@@ -1,4 +1,5 @@
 import { getAuth } from "./auth";
+import { SignInInput } from "./user.interface";
 import { UserInput } from "./user.validation";
 
 const userRegistration = async (payload: UserInput) => {
@@ -24,6 +25,24 @@ const userRegistration = async (payload: UserInput) => {
   };
 };
 
+const userSignIn = async (payload: SignInInput) => {
+  const auth = await getAuth();
+
+  const result = auth.api.signInEmail({
+    body: {
+      email: payload.email,
+      password: payload.password,
+      rememberMe: payload.rememberMe,
+    },
+  });
+
+  return {
+    user: (await result).user,
+    token: (await result).token,
+  };
+};
+
 export const userService = {
   userRegistration,
+  userSignIn,
 };

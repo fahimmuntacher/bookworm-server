@@ -5,6 +5,12 @@ export interface User {
   name: string;
   email: string;
   role: Role;
-  image : string | null,
+  image: string | null;
   createdAt: Date;
+}
+
+export interface SignInInput {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
 }
