@@ -1,20 +1,14 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URL as string;
+let client: MongoClient | null = null;
 
-if (!uri) {
-  throw new Error("MongoDB URI not found");
-}
+export const connectDB = async () => {
+  if (client) return client.db();
 
-const client = new MongoClient(uri);
+  client = new MongoClient(process.env.MONGODB_URL as string);
+  await client.connect();
 
-let db: Db;
+  console.log("✅ MongoDB connected");
 
-export const connectDB = async (): Promise<Db> => {
-  if (!db) {
-    await client.connect();
-    db = client.db();
-    console.log("✅ MongoDB Connected");
-  }
-  return db;
+  return client.db();
 };

@@ -5,6 +5,6 @@ import { userRouter } from "./modules/user/user.routes";
 const router = Router();
 
 router.use("/books", BookRouter);
-router.use("/user", userRouter);
+router.use("/users", userRouter);
 
 export default router;
