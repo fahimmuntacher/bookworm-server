@@ -1,5 +1,5 @@
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import {betterAuth} from "better-auth";
+import { betterAuth } from "better-auth";
 import { connectDB } from "../../config/db";
 
 let authInstance: any = null;

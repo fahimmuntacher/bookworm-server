@@ -6,7 +6,7 @@ import { GenreRouter } from "./modules/genre/genre.routes";
 const router = Router();
 
 router.use("/books", BookRouter);
-router.use("/user", userRouter);
+router.use("/users", userRouter);
 router.use("/genre", GenreRouter);
 
 export default router;
