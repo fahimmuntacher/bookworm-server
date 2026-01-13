@@ -78,7 +78,7 @@ export const ReviewController = {
       const id = req.params.id;
       if (!id) return res.status(400).json({ error: "Review ID is required" });
 
-      const review = await ReviewService.approveReview(id);
+      const review = await ReviewService.approveReview(id as string);
       res.status(200).json({ message: "Review approved", review });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -93,7 +93,7 @@ export const ReviewController = {
       const id = req.params.id;
       if (!id) return res.status(400).json({ error: "Review ID is required" });
 
-      const result = await ReviewService.deleteReview(id);
+      const result = await ReviewService.deleteReview(id as string);
       res.status(200).json({ message: "Review deleted", result });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
