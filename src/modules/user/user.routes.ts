@@ -1,23 +1,8 @@
 import { Router } from "express";
+import { userControllers } from "./user.controller";
 
 const router = Router();
 
-// router.get("/health", (_, res) => {
-//   res.json({ status: "OK" });
-// });
-
-// // Protected route example
-// router.get("/me", requireAuth, (req, res) => {
-//   res.json({
-//     user: req.user,
-//   });
-// });
-
-// // Admin-only example
-// router.get("/admin", requireAuth, requireRole("admin"), (req, res) => {
-//   res.json({
-//     message: "Welcome admin",
-//   });
-// });
+router.get("/session", userControllers.getSession);
 
 export const userRouter = router;

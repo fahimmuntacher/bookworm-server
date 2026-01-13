@@ -21,9 +21,32 @@ const createBook = async (payload: Book) => {
 };
 
 // get all books
-const getAllBooks = async () => {
+const getAllBooks = async (options: {
+  search?: string;
+  genreId?: string;
+  page?: number;
+  limit?: number;
+}) => {
   const db = await connectDB();
-  return db.collection<Book>(COLLECTION).find().toArray();
+  const { search, genreId, page = 1, limit = 10 } = options;
+
+  const query: any = {};
+
+  // Search by title or author (case-insensitive)
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: "i" } },
+      { author: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  // Filter by genreId
+  if (genreId) {
+    query.genreId = genreId;
+  }
+
+  const skip = (page - 1) * limit;
+  return db.collection<Book>(COLLECTION).find(query).skip(skip).limit(limit).toArray();
 };
 
 export const BookService = {

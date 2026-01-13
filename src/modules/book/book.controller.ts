@@ -20,7 +20,7 @@ const createBook = async (req: Request, res: Response) => {
 // get all books
 const getAllBooks = async (req: Request, res: Response) => {
   try {
-    const result = await BookService.getAllBooks();
+    const result = await BookService.getAllBooks(req.query);
     res.status(200).json({ success: true, data: result });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
