@@ -6,19 +6,27 @@ const COLLECTION = "books";
 
 // create book
 const createBook = async (payload: Book) => {
-  const { title } = payload;
   const db = await connectDB();
+
   const existedBook = await db.collection(COLLECTION).findOne({
-    title: title,
+    title: payload.title,
   });
 
   if (existedBook) {
     throw new Error("The book is already added");
   }
-  return db.collection<Book>(COLLECTION).insertOne({
+
+  const bookData: Book = {
     ...payload,
     createdAt: new Date(),
-  });
+  };
+
+  const result = await db.collection<Book>(COLLECTION).insertOne(bookData);
+
+  return {
+    _id: result.insertedId,
+    ...bookData,
+  };
 };
 
 // get all books
