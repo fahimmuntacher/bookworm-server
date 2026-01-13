@@ -4,7 +4,6 @@ import { BookService } from "./book.service";
 // create book api
 const createBook = async (req: Request, res: Response) => {
   try {
-    
     const result = await BookService.createBook(req.body);
     res.status(201).json({
       success: true,
@@ -16,14 +15,27 @@ const createBook = async (req: Request, res: Response) => {
   }
 };
 
-
 // get all books
 const getAllBooks = async (req: Request, res: Response) => {
   try {
-    const result = await BookService.getAllBooks(req.query);
-    res.status(200).json({ success: true, data: result });
+    const { search, page, limit, genreId } = req.query;
+
+    const result = await BookService.getAllBooks({
+      search: search as string,
+      genreId: genreId as string,
+      page: Number(page),
+      limit: Number(limit),
+    });
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
   } catch (error: any) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -37,16 +49,19 @@ const getBook = async (req: Request, res: Response) => {
   }
 };
 
-
 // Update book (admin)
 const updateBook = async (req: Request, res: Response) => {
   try {
-    const result = await BookService.updateBook(req.params.id as string, req.body);
-    res.status(200).json({ success: true, message: "Book updated", data: result });
+    const result = await BookService.updateBook(
+      req.params.id as string,
+      req.body
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Book updated", data: result });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
   }
-
 };
 
 // Delete book (admin)
@@ -63,5 +78,5 @@ export const BookController = {
   getAllBooks,
   getBook,
   updateBook,
-  deleteBook
+  deleteBook,
 };

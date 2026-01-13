@@ -1,15 +1,22 @@
 import { Request, Response } from "express";
 import { getAuth } from "./auth";
-import { toNodeHandler } from "better-auth/node";
 import { userService } from "./user.service";
+import { toNodeHandler } from "better-auth/node";
 
-// Get all users
+// Dynamic import cache for better-auth/node (ES module)
+let toNodeHandlerModule: any = null;
+
 const getAllUsers = async (req: Request, res: Response) => {
+  const { search, page = 1, limit = 10 } = req.query;
   try {
-    const users = await userService.getAllUsers();
-    res.status(200).json({ success: true, data: users });
-  } catch (error: any) {
-    res.status(400).json({ success: false, message: error.message });
+    const users = await userService.getAllUsers(
+      search as string,
+      Number(page),
+      Number(limit)
+    );
+    res.json(users);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
   }
 };
 
@@ -65,5 +72,5 @@ export const userControllers = {
   getAllUsers,
   getUserById,
   getSession,
-  updateUserRole
+  updateUserRole,
 };

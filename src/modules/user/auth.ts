@@ -1,15 +1,26 @@
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { betterAuth } from "better-auth";
 import { connectDB } from "../../config/db";
 
 let authInstance: any = null;
+let betterAuthModule: any = null;
+let mongodbAdapterModule: any = null;
 
 export const getAuth = async () => {
+  const db = await connectDB();
   if (authInstance) return authInstance;
 
-  const db = await connectDB();
+  // Dynamic import for ES modules (better-auth)
+  if (!betterAuthModule) {
+    betterAuthModule = await import("better-auth");
+  }
+  
+  if (!mongodbAdapterModule) {
+    mongodbAdapterModule = await import("better-auth/adapters/mongodb");
+  }
 
-  authInstance = betterAuth({
+  const { betterAuth } = betterAuthModule;
+  const { mongodbAdapter } = mongodbAdapterModule;
+
+  authInstance = (betterAuth as any)({
     database: mongodbAdapter(db),
     emailAndPassword: {
       enabled: true,

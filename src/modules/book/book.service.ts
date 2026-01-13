@@ -33,7 +33,6 @@ const getAllBooks = async (options: {
 
   const query: any = {};
 
-  // Search by title or author (case-insensitive)
   if (search) {
     query.$or = [
       { title: { $regex: search, $options: "i" } },
@@ -41,18 +40,24 @@ const getAllBooks = async (options: {
     ];
   }
 
-  // Filter by genreId
   if (genreId) {
     query.genreId = genreId;
   }
 
   const skip = (page - 1) * limit;
-  return db
-    .collection<Book>(COLLECTION)
-    .find(query)
-    .skip(skip)
-    .limit(limit)
-    .toArray();
+
+  const [books, total] = await Promise.all([
+    db
+      .collection<Book>(COLLECTION)
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .toArray(),
+
+    db.collection<Book>(COLLECTION).countDocuments(query),
+  ]);
+
+  return { books, total };
 };
 
 // Get single book by ID
@@ -79,20 +84,20 @@ const updateBook = async (id: string, payload: Partial<Book>) => {
   return result;
 };
 
-
 // Delete book by ID
 const deleteBook = async (id: string) => {
   const db = await connectDB();
-  const result = await db.collection<Book>(COLLECTION).deleteOne({ _id: new ObjectId(id) });
+  const result = await db
+    .collection<Book>(COLLECTION)
+    .deleteOne({ _id: new ObjectId(id) });
   if (result.deletedCount === 0) throw new Error("Book not found");
   return true;
 };
-
 
 export const BookService = {
   createBook,
   getAllBooks,
   getBookById,
   updateBook,
-  deleteBook
+  deleteBook,
 };
