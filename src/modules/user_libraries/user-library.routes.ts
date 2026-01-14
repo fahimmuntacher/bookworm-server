@@ -1,6 +1,6 @@
 import { Router } from "express";
-import authMiddleware, { UserRole } from "../../middleware/auth.middleware";
-import { userLibraryController } from "./user-library.controller";
+import authMiddleware, { UserRole } from "../../middleware/auth.middleware.js";
+import { userLibraryController } from "./user-library.controller.js";
 
 const router = Router();
 router.post("/", authMiddleware(UserRole.USER), userLibraryController.upsert);

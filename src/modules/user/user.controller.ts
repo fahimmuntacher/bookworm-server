@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { getAuth } from "./auth";
-import { userService } from "./user.service";
+
+import { userService } from "./user.service.js";
 import { toNodeHandler } from "better-auth/node";
+import { getAuth } from "../../lib/auth.js";
 
 // Dynamic import cache for better-auth/node (ES module)
 let toNodeHandlerModule: any = null;

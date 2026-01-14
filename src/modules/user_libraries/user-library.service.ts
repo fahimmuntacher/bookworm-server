@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { connectDB } from "../../config/db";
-import { UserLibrary } from "./user-library.interface";
+import { connectDB } from "../../config/db.js";
+import { UserLibrary } from "./user-library.interface.js";
 
 const COLLECTION = "user_libraries";
 
@@ -34,17 +34,17 @@ const getMyLibrary = async (userId: string) => {
   const library = await db
     .collection(COLLECTION)
     .aggregate([
-      // 1️⃣ Match user
+      // Match user
       { $match: { userId } },
 
-      // 2️⃣ Convert bookId to ObjectId
+      // Convert bookId to ObjectId
       {
         $addFields: {
           bookObjectId: { $toObjectId: "$bookId" },
         },
       },
 
-      // 3️⃣ Join with books collection
+      // Join with books collection
       {
         $lookup: {
           from: "books",
@@ -54,10 +54,10 @@ const getMyLibrary = async (userId: string) => {
         },
       },
 
-      // 4️⃣ Unwind book
+      // Unwind book
       { $unwind: "$book" },
 
-      // 5️⃣ Group by status
+      // Group by status
       {
         $group: {
           _id: "$status",
@@ -80,7 +80,7 @@ const getMyLibrary = async (userId: string) => {
     ])
     .toArray();
 
-  // 6️⃣ Normalize result
+  // Normalize result
   const result = {
     want: [],
     reading: [],

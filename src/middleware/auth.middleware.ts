@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getAuth } from "../modules/user/auth";
+import { getAuth } from "../lib/auth.js";
 
 export enum UserRole {
   USER = "user",

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GenreService } from "./genre.service";
+import { GenreService } from "./genre.service.js";
 
 // Create Genre
 const createGenre = async (req: Request, res: Response) => {

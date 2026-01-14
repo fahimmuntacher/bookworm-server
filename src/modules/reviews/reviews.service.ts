@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { connectDB } from "../../config/db";
-import { Review } from "./review.interface";
+import { connectDB } from "../../config/db.js";
+import { Review } from "./review.interface.js";
 
 const COLLECTION = "reviews";
 

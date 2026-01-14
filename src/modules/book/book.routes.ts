@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { BookController } from "./book.controller";
-import authMiddleware, { UserRole } from "../../middleware/auth.middleware";
+import { BookController } from "./book.controller.js";
+import authMiddleware, { UserRole } from "../../middleware/auth.middleware.js";
 
 
 

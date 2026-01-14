@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TutorialService } from "./tutorials.service";
+import { TutorialService } from "./tutorials.service.js";
 
 
 export const TutorialController = {

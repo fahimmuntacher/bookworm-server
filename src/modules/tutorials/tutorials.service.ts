@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { Tutorial } from "./tutorials.interface";
-import { connectDB } from "../../config/db";
+import { Tutorial } from "./tutorials.interface.js";
+import { connectDB } from "../../config/db.js";
 
 const COLLECTION = "tutorials";
 

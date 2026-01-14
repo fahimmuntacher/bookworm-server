@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AdminDashboardService } from "./admin-dashboard.service";
+import { AdminDashboardService } from "./admin-dashboard.service.js";
 
 
 export const AdminDashboardController = {

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { connectDB } from "../../config/db";
-import { UserInterface } from "./user.interface";
+import { connectDB } from "../../config/db.js";
+import { UserInterface } from "./user.interface.js";
 
 const COLLECTION = "user";
 // Get all users with optional search and pagination

@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { connectDB } from "../../config/db";
-import { Genre } from "./genre.interface";
+import { connectDB } from "../../config/db.js";
+import { Genre } from "./genre.interface.js";
 
 const COLLECTION = "genres";
 

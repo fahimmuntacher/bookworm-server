@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userLibraryService } from "./user-library.service";
+import { userLibraryService } from "./user-library.service.js";
 
 const upsert = async (req: Request, res: Response) => {
   if (!req.user) {

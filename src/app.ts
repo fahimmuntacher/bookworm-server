@@ -1,32 +1,50 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { getAuth } from "./modules/user/auth";
-import router from ".";
+import { getAuth } from "./lib/auth.js";
+import router from "./index.js";
 
 const app = express();
 
-// CORS
+// Trust Vercel proxy headers
+app.set("trust proxy", true);
+
+// CORS — only allow frontend and dev
 app.use(
   cors({
-    origin: process.env.ORIGIN_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      console.log("Incoming Origin:", origin);
+      if (!origin) return callback(null, true); // Postman / curl
+      if (
+        origin === "http://localhost:3000" ||
+        origin === "https://bookworm-client-khaki.vercel.app"
+      ) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ],
   })
 );
 
-// Cookies (REQUIRED for better-auth)
+// Cookies
 app.use(cookieParser());
 
-// Dynamic import for better-auth/node (ES module)
+// Dynamic Better-Auth handler
 let toNodeHandlerModule: any = null;
 let authHandler: any = null;
 
-// Initialize the auth handler once
 const initializeAuthHandler = async () => {
   if (!authHandler) {
     const auth = await getAuth();
 
-    // Dynamic import for ES module
     if (!toNodeHandlerModule) {
       toNodeHandlerModule = await import("better-auth/node");
     }
@@ -37,17 +55,18 @@ const initializeAuthHandler = async () => {
   return authHandler;
 };
 
-// Auth routes - must be BEFORE express.json() so better-auth can read raw body
-app.all(/^\/api\/auth\/.*/, async (req, res, next) => {
+// Auth routes (must be before express.json)
+app.use("/api/auth", async (req, res, next) => {
   try {
     const handler = await initializeAuthHandler();
     return handler(req, res);
   } catch (error) {
+    console.error("Auth Handler Error:", error);
     next(error);
   }
 });
 
-// JSON parser (AFTER auth routes - only for non-auth routes)
+// JSON parser for other routes
 app.use(express.json());
 
 // App routes
